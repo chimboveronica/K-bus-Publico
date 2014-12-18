@@ -134,15 +134,15 @@ Ext.onReady(function () {
                         tooltip: '<span class="tooltip">Cancelar</span>',
                         scope: this,
                         handler: function () {
-                            winSugerencias.hide();
+                            winDenuncias.hide();
                         }}
                 ]
             }]
     });
 });
 function showWinAdminDenuncias() {
-    if (!winSugerencias) {
-        winSugerencias = Ext.create('Ext.window.Window', {
+    if (!winDenuncias) {
+        winDenuncias = Ext.create('Ext.window.Window', {
             layout: 'fit',
             title: '<div id="titulosForm">Denuncias</div>',
             resizable: false,
@@ -154,7 +154,7 @@ function showWinAdminDenuncias() {
         });
     }
     onResetDenuncia();
-    winSugerencias.show();
+    winDenuncias.show();
 }
 
 
