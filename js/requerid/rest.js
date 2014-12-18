@@ -28,10 +28,8 @@ function recuperar(ajaxResponse, textStatus)
 }
 ;
 function cargar() {
-    console.log(datos);
 
     for (var i = 0; i < datos.length; i++) {
-        console.log(datos[i].ruta);
         showRouteMap[i] = [datos[i].idRuta, datos[i].ruta, false];
 //        menuRoute.add({itemId: datos[i].id, text: datos[i].ruta, checked: false});
     }

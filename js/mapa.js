@@ -10,6 +10,7 @@ var lienzoEstaciones;
 var lienzoVehicle;
 
 var markerInicioFin;
+var marker;
 var dragFeature;
 var toMercator;
 
@@ -83,15 +84,13 @@ function loadMap() {
             map.setCenter(lonLat, zoomKBus);
 
             map.events.register('click', map, function (e) {
-                if (positionPoint) {
-                    var coord = map.getLonLatFromViewPortPx(e.xy);
-                    var aux = new OpenLayers.Geometry.Point(coord.lon, coord.lat);
-                    aux.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
+                var coord = map.getLonLatFromViewPortPx(e.xy);
+                var aux = new OpenLayers.Geometry.Point(coord.lon, coord.lat);
+                aux.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
 
 
-                    winAdminPoint.show();
-                    positionPoint = false;
-                }
+//                    winAdminPoint.show();
+//                    positionPoint = false;
             });
 
             var styleVehicle = new OpenLayers.StyleMap({
@@ -182,11 +181,10 @@ function loadMap() {
                         var dir = feature.attributes.dir;
 
                         var contenidoAlternativo =
-                                "<section>" +
-                                "<b>Punto: </b>" + punto.toString() + "</br>" +
-                                "<b>Geocerca: </b>" + geo.toString() + "</br>" +
-                                "<b>Dirección: </b>" + dir.toString() + "" +
-                                "</section>";
+                                "<table>" +
+                                "<tr><td><b>Parada:</b></td><td>" + punto.toString() + "</td></tr>" +
+                                "<tr><td><b>Dirección:</b></td><td>" + dir.toString() + "</td></tr>" +
+                                "</table>";
 
                         var popup = new OpenLayers.Popup.FramedCloud("popup",
                                 OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
@@ -346,6 +344,7 @@ function loadMap() {
             lienzoLineTravel = new OpenLayers.Layer.Vector("Linea de Recorrido");
             lienzoLineRouteManual = new OpenLayers.Layer.Vector("Linea de Ruta Manual");
             markerInicioFin = new OpenLayers.Layer.Markers("Inicio-Fin");
+            marker = new OpenLayers.Layer.Markers("Inicio-Fin");
 
             drawLine = new OpenLayers.Control.DrawFeature(lines, OpenLayers.Handler.Path, {featureAdded: getDataRoute});
             modifyLine = new OpenLayers.Control.ModifyFeature(lines);
@@ -361,6 +360,7 @@ function loadMap() {
                 lienzoLineRouteManual,
                 lienzoPointRouteManual,
                 markerInicioFin,
+                marker,
                 lines,
                 linesVehiclesInPlace
             ]);
@@ -445,7 +445,7 @@ function onVehiculoSelect(evt) {
     }
 
     var muniRegLast = feature.attributes.muniRegLast;
-    var companyLast = feature.attributes.companyLast;
+    var placaLast = feature.attributes.placaLast;
     var dateTimeLast = feature.attributes.dateTimeLast;
     var speedLast = feature.attributes.speedLast;
     var addressLast = feature.attributes.addressLast;
@@ -454,13 +454,12 @@ function onVehiculoSelect(evt) {
     }
 
     var contenidoAlternativo =
-            "<section>" +
-            "<b>Empresa: </b>" + companyLast + "<br>" +
-            "<b>Vehiculo: </b>" + muniRegLast + "<br>" +
-            "<b>Fecha y Hora: </b>" + dateTimeLast + "<br>" +
-            "<b>Velocidad: </b>" + speedLast + " Km/h<br>" +
-            "<b>Dirección: </b>" + addressLast + "<br>" +
-            "</section>";
+            "<table>" +
+            "<tr><td><b>Registro Municipal: </b></td><td>" + muniRegLast + "</td></tr>" +
+            "<tr><td><b>Placa: </b></td><td>" + placaLast + "<br>" +
+            "<tr><td><b>Fecha y Hora: </b></td><td>" + dateTimeLast + "</td></tr>" +
+            "<tr><td><b>Velocidad: </b></td><td>" + speedLast + " Km/h</td></tr>" +
+            "</table>";
 
     var popup = new OpenLayers.Popup.FramedCloud("popup",
             OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
@@ -501,64 +500,57 @@ function addVehiculosToCanvas(cordGrap) {
         var idVehicle = datosVeh.idVehicleLast;
         //Extracción dependiendo del Layer
         var vehicleFeature = lienzoVehicle.getFeatureById('last' + idVehicle);
-
         //Crear un nuevo elemento para el taxi que no existe
         if (vehicleFeature === null) {
             // Coordenadas
-            var x = datosVeh.longitudLast;
-            var y = datosVeh.latitudLast;
+            var x = datosVeh.longitud;
+            var y = datosVeh.latitud;
             // Posicion lon : lat
             var point = new OpenLayers.Geometry.Point(x, y);
-
             // Transformacion de coordendas
             point.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
-            var dateTimeLast = new Date(datosVeh.dateTimeLast);
+            var dateTimeLast = new Date(datosVeh.fechaHora);
 
             vehicleFeature = new OpenLayers.Feature.Vector(point, {
-                iconLast: 'img/' + datosVeh.iconLast,
-                idCompanyLast: datosVeh.idCompanyLast,
-                companyLast: datosVeh.companyLast,
-                idDeviceLast: datosVeh.deviceLast,
-                muniRegLast: datosVeh.muniRegLast,
+                iconLast: 'img/' + datosVeh.icono,
+                placaLast: datosVeh.placa,
+                muniRegLast: datosVeh.regMunicipal,
                 dateTimeLast: Ext.Date.format(dateTimeLast, 'Y-m-d H:i:s'),
-                speedLast: datosVeh.speedLast,
-                addressLast: datosVeh.addressLast,
+                speedLast: datosVeh.velocidad,
                 favColor: 'blue',
                 align: "lt"
             });
 
             // Se coloca el ID de veh�culo a la imagen            
-            vehicleFeature.id = 'last' + idVehicle;
+//            vehicleFeature.id = 'last' + idVehicle;
             //Se añade a la capa que corresponda
             lienzoVehicle.addFeatures([vehicleFeature]);
         } else {
             // Comprobar si los datos graficados estan desactualizados
-            var dateTimeLast = new Date(datosVeh.dateTimeLast);
+            var dateTimeLast = new Date(datosVeh.fechaHora);
             if (vehicleFeature.attributes.hora !== Ext.Date.format(datosVeh.dateTimeLast, 'H:i:s')) {
                 var poppedup = false;
                 poppedup = vehicleFeature.attributes.poppedup;
 
                 // Nuevo punto
-                var newPoint = new OpenLayers.LonLat(datosVeh.longitudLast, datosVeh.latitudLast);
+                var newPoint = new OpenLayers.LonLat(datosVeh.longitud, datosVeh.latitud);
                 newPoint.transform(new OpenLayers.Projection("EPSG:4326"),
                         new OpenLayers.Projection("EPSG:900913"));
                 // Asignamos icono y Movemos el vehiculo 
-                vehicleFeature.attributes.iconLast = "img/" + datosVeh.iconLast;
+                vehicleFeature.attributes.iconLast = "img/" + datosVeh.icono;
                 vehicleFeature.move(newPoint);
 
                 if (poppedup) {
                     onVehiculoUnselect(vehicleFeature);
                     // Actualizamos Datos
                     vehicleFeature.attributes.dateTimeLast = Ext.Date.format(dateTimeLast, 'Y-m-d H:i:s');
-                    vehicleFeature.attributes.speedLast = datosVeh.speedLast;
-                    vehicleFeature.attributes.addressLast = datosVeh.addressLast;
+                    vehicleFeature.attributes.speedLast = datosVeh.velocidad;
 
                     onVehiculoSelect(vehicleFeature);
                 } else {
                     // Actualizamos Datos
                     vehicleFeature.attributes.dateTimeLast = Ext.Date.format(dateTimeLast, 'Y-m-d H:i:s');
-                    vehicleFeature.attributes.speedLast = datosVeh.speedLast;
-                    vehicleFeature.attributes.addressLast = datosVeh.addressLast;
+                    vehicleFeature.attributes.speedLast = datosVeh.velocidad;
                 }
             }
         }
@@ -959,28 +951,21 @@ function drawLineAdminRouteByPoint(json, invert) {
 /* 
  * Dibuja el trazado de una ruta manual en el mapa
  */
-function drawLineRoute(json, idRuta) {
-
+function drawLineRoute(json, idRuta, color) {
     markerStartFinish(json);
-
     var puntosRuta = new Array();
-
     for (var i = 0; i < json.length; i++) {
-        var dataRuta = json[i];
-
-        var pt = new OpenLayers.Geometry.Point(dataRuta.longitudLine, dataRuta.latitudLine);
+        var pt = new OpenLayers.Geometry.Point(json[i].longitud, json[i].latitud);
         pt.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
         puntosRuta.push(pt);
     }
-
     var ruta = new OpenLayers.Geometry.LineString(puntosRuta);
     //Estilo de Linea de Recorrido
     var style = {
-        strokeColor: dataRuta.colorLine,
+        strokeColor: color,
         strokeOpacity: 1,
         strokeWidth: 4
     };
-
     var lineFeature = new OpenLayers.Feature.Vector(ruta, null, style);
     lienzoLineRoute.addFeatures([lineFeature]);
     for (var i = 0; i < showRouteMap.length; i++) {
@@ -1078,25 +1063,55 @@ function drawLineRouteManual(json) {
 
 function drawPointsRoute(coordPuntos, idRuta) {
     var features = new Array();
-
     for (var i = 0; i < coordPuntos.length; i++) {
         var dataRuta = coordPuntos[i];
 
-        var pt = new OpenLayers.Geometry.Point(dataRuta.longitudPoint, dataRuta.latitudPoint);
+        var pt = new OpenLayers.Geometry.Point(dataRuta.longitud, dataRuta.latitud);
         pt.transform(new OpenLayers.Projection("EPSG:4326"),
                 new OpenLayers.Projection("EPSG:900913"));
 
         var puntoMap = new OpenLayers.Feature.Vector(pt, {
-            idPunto: dataRuta.idPoint,
-            geo: dataRuta.geoSkpPoint,
-            punto: dataRuta.pointPoint,
-            ordPt: dataRuta.orderPoint,
-            dir: dataRuta.addressPoint,
-            color: dataRuta.colorPoint,
+            idPunto: dataRuta.idEstacion,
+            geo: dataRuta.codigo,
+            punto: dataRuta.estacion,
+            dir: dataRuta.direccion,
+            color: 'red',
+            icono: 'img/parada_bus.png',
             poppedup: false
         });
 
-        puntoMap.id = 'route' + idRuta + 'point' + dataRuta.idPoint;
+//        puntoMap.id = 'img/parada_bus.png';
+
+        features.push(puntoMap);
+    }
+
+    lienzoPointRoute.addFeatures(features);
+    for (var i = 0; i < showRouteMap.length; i++) {
+        if (showRouteMap[i][0] === idRuta) {
+            showRouteMap[i][2] = features;
+        }
+    }
+}
+
+function drawPointsVehiculos(ultimodatoskps, ultimodatofastracks, idRuta) {
+    var features = new Array();
+    for (var i = 0; i < ultimodatoskps.length; i++) {
+        var dataRuta = ultimodatoskps[i];
+
+        var pt = new OpenLayers.Geometry.Point(dataRuta.longitud, dataRuta.latitud);
+        pt.transform(new OpenLayers.Projection("EPSG:4326"),
+                new OpenLayers.Projection("EPSG:900913"));
+
+        var puntoMap = new OpenLayers.Feature.Vector(pt, {
+            idPunto: dataRuta.idEstacion,
+            geo: dataRuta.codigo,
+            punto: dataRuta.estacion,
+            dir: dataRuta.direccion,
+            color: 'red',
+            poppedup: false
+        });
+
+        puntoMap.id = 'route' + idRuta + 'point' + dataRuta.idEstacion;
 
         features.push(puntoMap);
     }
@@ -1192,6 +1207,23 @@ function drawPointsRouteManual(muniReg, json) {
     lienzoPointRouteManual.addFeatures(features);
 }
 
+function markersPoints(json) {
+    var size = new OpenLayers.Size(32, 32);
+    var icon = new OpenLayers.Icon(
+            'img/parada_bus.png',
+            size, null, 0);
+
+    for (var i = 0; i < json.length; i++) {
+        var pInicio = new OpenLayers.LonLat(json[i].longitud, json[i].latitud);
+        pInicio.transform(new OpenLayers.Projection("EPSG:4326"),
+                new OpenLayers.Projection("EPSG:900913"));
+        marker.addMarker(new OpenLayers.Marker(pInicio, icon));
+
+    }
+
+
+}
+
 function markerStartFinish(json) {
     var size = new OpenLayers.Size(32, 32);
     var iconIni = new OpenLayers.Icon(
@@ -1204,16 +1236,15 @@ function markerStartFinish(json) {
 
     markerInicioFin.clearMarkers();
 
-    var filIni = json[0];
 
-    var pInicio = new OpenLayers.LonLat(filIni.longitudLine, filIni.latitudLine);
+    var pInicio = new OpenLayers.LonLat(json[0].longitud, json[0].latitud);
     pInicio.transform(new OpenLayers.Projection("EPSG:4326"),
             new OpenLayers.Projection("EPSG:900913"));
     markerInicioFin.addMarker(new OpenLayers.Marker(pInicio, iconIni));
 
     var filFin = json[json.length - 1];
 
-    var pFin = new OpenLayers.LonLat(filFin.longitudLine, filFin.latitudLine);
+    var pFin = new OpenLayers.LonLat(filFin.longitud, filFin.latitud);
     pFin.transform(new OpenLayers.Projection("EPSG:4326"),
             new OpenLayers.Projection("EPSG:900913"));
     markerInicioFin.addMarker(new OpenLayers.Marker(pFin, iconFin));
@@ -1264,11 +1295,11 @@ function arrastrar(feature, pixel) {
 
 function clearMapa() {
     for (var i = 0; i < showRouteMap.length; i++) {
-       
-            clearMarks();
-            lienzoLineRoute.destroyFeatures(showRouteMap[i][1]);
-            lienzoPointRoute.destroyFeatures(showRouteMap[i][2]);
-        
+
+        clearMarks();
+        lienzoLineRoute.destroyFeatures(showRouteMap[i][1]);
+        lienzoPointRoute.destroyFeatures(showRouteMap[i][2]);
+
     }
 }
 

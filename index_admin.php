@@ -36,9 +36,14 @@
         <!--Fin Mapa-->
     </head>
     <body oncontextmenu = "return false">        
-        <header></header>
-        <nav></nav>
-        <footer>            
-        </footer>
+        <script type="text/javascript">
+            document.write('<div id="imagen">' +
+                    '<img src="img/simbología.png"  width="80" height="80"/>' +
+                    '</div>');
+            document.write('<div id="imagenK">' +
+                    '<img  src="img/credits.png"  width="150" height="50"/><img src="img/logos.png"  width="50" height="50"/>' +
+                    '</div>');
+
+        </script>
     </body>
 </html>
