@@ -7,13 +7,14 @@ var tabPanelMapa;
 var bandera = true;
 var color;
 var bandera1 = true;
+var vehiculo = false;
 var spot = Ext.create('Ext.ux.Spotlight', {
     easing: 'easeOut',
     duration: 500
 });
 Ext.onReady(function () {
     Ext.apply(Ext.form.field.VTypes, {
-            cedulaValida: function(val, field) {
+        cedulaValida: function (val, field) {
             if (val.length !== 10) {
                 return false;
             }
@@ -27,7 +28,7 @@ Ext.onReady(function () {
             return true;
         },
         cedulaValidaText: 'Numero de Cedula Invalida',
-    numeroTelefono: function(val, field) {
+        numeroTelefono: function (val, field) {
             var partes = val.split("");
             if (partes.length === 10) {
                 //para celular
@@ -46,53 +47,31 @@ Ext.onReady(function () {
             }
         },
         numeroTelefonoText: 'Ingresar solo caracteres numéricos válidos <br>que empiezen con [09] movil tamaño de (10)dígitos<br> 0 [072] convencional tamaño de (9)dígitos ',
-        emailNuevo: function(val, field) {
+        emailNuevo: function (val, field) {
             if (!/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/.test(val)) {
                 return false;
             }
             return true;
         },
         emailNuevoText: 'Dede ingresar segun elz formato kradac@kradac.com <br>sin caracteres especiales',
-        
-        });
+    });
     Ext.tip.QuickTipManager.init();
-    menuRoute = Ext.create('Ext.menu.Menu', {
-        
-        items: [],
+
+    var menuRoutePrincipal = Ext.create('Ext.menu.Menu', {
+        items: menuRoute,
         listeners: {
             click: function (menu, item, e, eOpts) {
-                if (item.checked) {
-                    var idRoute = item.getItemId();
-                    var form = Ext.create('Ext.form.Panel');
-                    form.getForm().submit({
-                        url: 'php/gui/draw/getRoute.php',
-                        params: {
-                            idRoute: idRoute
-                        },
-                        failure: function (form, action) {
-                            Ext.MessageBox.show({
-                                title: 'Mensaje',
-                                msg: action.result.message,
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.INFO
-                            });
-                        },
-                        success: function (form, action) {
-                            var resultado = action.result;
-                            if (connectionMap()) {
-                                drawLineRoute(resultado.dataLine, idRoute);
-                                drawPointsRoute(resultado.dataPoint, idRoute);
-                            }
-                        }
-                    });
-                } else {
-                    if (connectionMap()) {
-                        clearLienzoRouteByItems(item);
-                    }
-                }
+                clearLienzoLineRoute();
+                clearVehiclesByRoute();
+                color = item.color;
+                idRoute = item.getItemId();
+                setRoute();
             }
         }
     });
+//    for (var i = 1; i < datos.length; i++) {
+//        menuRoute.add({itemId: datos[i].idRuta, text: datos[i].ruta, color: datos[i].color});
+//    }
 
     var panelMenu = Ext.create('Ext.form.Panel', {
         region: 'north',
@@ -181,70 +160,83 @@ Ext.onReady(function () {
                             this.setText('<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="40"></span>');
                             clearLienzoLineRoute();
                             clearMarks();
+                            vehiculo = true;
                             setVehicle();
                         } else {
                             this.setText('<span style="color:#003F72"><img src="img/ruta2.png" width="100" height="40"></span>');
                             setRoute();
                             clearVehiclesByRoute();
                             bandera1 = true;
+                            vehiculo = false;
+
                         }
                     }
 
                 }
+            }, '-',
+            {
+                xtype: 'splitbutton',
+                text: '<span id="titulo">Seleccionar Rutas</span>',
+                style: {
+                    background: '#3A8144'
+                },
+                width: '30%',
+                iconCls: 'icon-by-destination',
+                menu: menuRoutePrincipal,
+                handler: function () {
+                    this.showMenu();
+                }
             },
-            {
-                xtype: 'label',
-                html: '<b><span class="btn-menu">Rutas:</span></b>'
-            }, '-',
-            {
-                xtype: 'combo',
-                width: '50%',
-                labelWidth: 20,
-                store: storeAuxRoute,
-                fieldLabel: '<img src="img/buscar3.png"/>',
-                displayField: 'todo',
-                labelSeparator: '',
-                typeAhead: false,
-                hideTrigger: true,
-                emptyText: 'Ruta',
-                listConfig: {
-                    loadingText: 'Buscando...',
-                    emptyText: 'No ha encontrado resultados parecidos.',
-                    // Custom rendering template for each item
-                    getInnerTpl: function () {
-                        return '<b>{ruta}';
-                    }
-                },
-                listeners: {
-                    select: function (thisObject, record, eOpts) {
-                        idRoute = record[0].data.idRuta;
-                        color = record[0].data.color;
-                        clearLienzoLineRoute();
-                        if (bandera) {
-                            setEstation();
-                        }
-                        if (bandera1) {
-                            setRoute();
-                        } else {
-                            clearLienzoLineRoute();
-                        }
-                        clearVehiclesByRoute();
-                    }
-                },
-                pageSize: 10
-            }, '-',
+            '->',
             {
                 iconCls: 'icon-localizame',
-                text: '<img src="img/marker.png"/><b><span class="btn-menu">Ubicar mi Posición</span></b>',
+                text: '<img src="img/marker.png"/><b><span id="titulo">Ubicar mi Posición</span></b>',
                 tooltip: 'Ubicar mi Posición',
                 style: {
-                    background: '#E0E0E0',
+                    background: '#3A8144',
                 },
                 handler: function () {
                     getLocation();
                 }
-            }
-
+            },
+//            '-',
+//            {
+//                xtype: 'combo',
+//                width: '30%',
+//                labelWidth: 20,
+//                store: storeAuxRoute,
+//                fieldLabel: '<img src="img/buscar3.png"/>',
+//                displayField: 'todo',
+//                labelSeparator: '',
+//                typeAhead: false,
+//                hideTrigger: true,
+//                emptyText: 'Ruta',
+//                listConfig: {
+//                    loadingText: 'Buscando...',
+//                    emptyText: 'No ha encontrado resultados parecidos.',
+//                    // Custom rendering template for each item
+//                    getInnerTpl: function () {
+//                        return '<b>{ruta}';
+//                    }
+//                },
+//                listeners: {
+//                    select: function (thisObject, record, eOpts) {
+//                        idRoute = record[0].data.idRuta;
+//                        color = record[0].data.color;
+//                        clearLienzoLineRoute();
+//                        if (bandera) {
+//                            setEstation();
+//                        }
+//                        if (bandera1) {
+//                            setRoute();
+//                        } else {
+//                            clearLienzoLineRoute();
+//                        }
+//                        clearVehiclesByRoute();
+//                    }
+//                },
+//                pageSize: 10
+//            }
         ]
     });
 
@@ -274,10 +266,14 @@ Ext.onReady(function () {
     });
 
     loadMap();
-    storeAuxRoute.load();
 
     setTimeout(function () {
-        setVehicle();}, 5 * 1000);
+        if (vehiculo) {
+            setVehicle();
+        }
+    }, 5 * 1000);
+
+
 });
 function setEstation() {
     if (connectionMap()) {
@@ -304,9 +300,7 @@ function setEstation() {
 }
 function setRoute() {
     if (connectionMap()) {
-
         var resultado;
-
         $.ajax({
             type: 'GET',
             url: 'http://190.12.61.30:5801//K-Bus/webresources/com.kradac.kbus.rest.entities.linearutas/ruta=' + idRoute, dataType: 'json',
@@ -330,9 +324,8 @@ function setRoute() {
 
 
 function setVehicle() {
-    console.log('ffffff');
     if (idRoute !== '') {
-        if (bandera) {
+        if (vehiculo) {
             if (connectionMap()) {
                 var vehiculos;
                 $.ajax({

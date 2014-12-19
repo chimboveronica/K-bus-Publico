@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 
-var menuRoute;
 var showCoopMap = new Array();
 var showRouteMap = new Array();
 var storeAuxRoute;
 var datos;
+var menuRoute = [];
 $.ajax({
     type: 'GET',
     url: 'http://190.12.61.30:5801//K-Bus/webresources/com.kradac.kbus.rest.entities.rutas', dataType: 'json',
@@ -24,14 +24,22 @@ $.ajax({
 function recuperar(ajaxResponse, textStatus)
 {
     datos = Ext.JSON.decode(ajaxResponse);
-    cargar();
+    if (datos.length > 0) {
+        for (var i = 0; i < datos.length; i++) {
+            console.log(datos[i].idRuta);
+            menuRoute.push({itemId: datos[i+1].idRuta, text: datos[i+1].ruta, color: datos[i+1].color});
+            showRouteMap[i] = [datos[i].idRuta, datos[i].ruta, false];
+
+        }
+    } else {
+        Ext.example.msg("Alerta", 'Problemas con el servidor');
+
+    }
+
 }
 ;
 function cargar() {
-    for (var i = 0; i < datos.length; i++) {
-        showRouteMap[i] = [datos[i].idRuta, datos[i].ruta, false];
-        
-    }
+
     storeAuxRoute = Ext.create('Ext.data.Store', {
         data: datos,
         reader: {
@@ -49,6 +57,7 @@ function cargar() {
             'codRuta', 'color', 'distancia', 'fechaHoraRegistro', 'icono', 'idRuta', 'ruta', 'tiempoSancion', 'velocidadComercial', 'velocidadOperacion'
         ],
     });
+
 }
 
 
