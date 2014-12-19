@@ -1,6 +1,6 @@
 var winDenuncias;
 var formDenuncias;
-Ext.onReady(function() {
+Ext.onReady(function () {
     var motivos = Ext.create('Ext.data.Store', {
         fields: ['id', 'mes'],
         data: [{id: 1, data: 'Exceso de Velocidad'},
@@ -101,7 +101,7 @@ Ext.onReady(function() {
             }
         ],
         listeners: {
-            create: function(form, data) {
+            create: function (form, data) {
 
             }
         },
@@ -117,10 +117,10 @@ Ext.onReady(function() {
                         tooltip: '<span class="tooltip">Crear Registro</span>',
                         handler: onSendDenuncia,
                         listeners: {
-                            mouseover: function() {
+                            mouseover: function () {
                                 this.setText('<span class="btn-menu-over">Crear</span>');
                             },
-                            mouseout: function() {
+                            mouseout: function () {
                                 this.setText('<span class="btn-menu">Crear</span>');
                             }
                         }
@@ -135,7 +135,7 @@ Ext.onReady(function() {
                         text: '<span class="btn-menu">Cancelar</span>',
                         tooltip: '<span class="tooltip">Cancelar</span>',
                         scope: this,
-                        handler: function() {
+                        handler: function () {
                             winDenuncias.hide();
                         }}
                 ]
@@ -149,7 +149,7 @@ function showWinAdminDenuncias() {
             title: '<div id="titulosForm">Denuncias</div>',
             resizable: false,
             width: 350,
-            height: 580,
+            height: 500,
             closeAction: 'hide',
             plain: false,
             items: formDenuncias
@@ -170,10 +170,11 @@ function onSendDenuncia() {
             url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.historic.denuncias',
             dataType: "json",
             data: formToJSON(),
-            success: function(data, textStatus, jqXHR) {
+            success: function (data, textStatus, jqXHR) {
                 Ext.example.msg('Alerta', 'Se ingresaron los datos');
+                onResetDenuncia();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 alert('addWine error: ' + textStatus);
             }
         });
@@ -188,6 +189,7 @@ function onSendDenuncia() {
             });
         }
         ;
+
     } else {
         Ext.example.msg("Alerta", 'Llenar los campos marcados en rojo, correctamente ');
 
@@ -198,7 +200,7 @@ function onSearch() {
         case 1:
             break;
         case 2:
-            
+
             break;
     }
 

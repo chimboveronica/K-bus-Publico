@@ -1,5 +1,9 @@
 var winSugerencias;
 var formSugerencias;
+var pregunta1 = 0;
+var pregunta2 = 0;
+var pregunta3 = 0;
+
 Ext.onReady(function () {
 
     formSugerencias = Ext.create('Ext.form.Panel', {
@@ -16,8 +20,16 @@ Ext.onReady(function () {
                 columns: 2,
                 vertical: true,
                 items: [
-                    {boxLabel: 'Si', name: 'rb', inputValue: '1'},
-                    {boxLabel: 'No', name: 'rb', inputValue: '2', checked: true}, ]
+                    {boxLabel: 'Si', name: 'rb1', inputValue: '1'},
+                    {boxLabel: 'No', name: 'rb1', inputValue: '2', checked: true},
+                ],
+                listeners: {
+                    change: function (field, newValue, oldValue) {
+                        if (parseInt(newValue['rb1']) === 1) {
+                            pregunta1 = 1;
+                        }
+                    }
+                }
             },
             {
                 xtype: 'label',
@@ -28,8 +40,15 @@ Ext.onReady(function () {
                 columns: 2,
                 vertical: true,
                 items: [
-                    {boxLabel: 'Si', name: 'rb', inputValue: '1'},
-                    {boxLabel: 'No', name: 'rb', inputValue: '2', checked: true}, ]
+                    {boxLabel: 'Si', name: 'rb2', inputValue: '1'},
+                    {boxLabel: 'No', name: 'rb2', inputValue: '2', checked: true}, ],
+                listeners: {
+                    change: function (field, newValue, oldValue) {
+                        if (parseInt(newValue['rb2']) === 1) {
+                            pregunta2 = 1;
+                        }
+                    }
+                }
             },
             {
                 xtype: 'label',
@@ -40,8 +59,15 @@ Ext.onReady(function () {
                 columns: 2,
                 vertical: true,
                 items: [
-                    {boxLabel: 'Si', name: 'rb', inputValue: '1'},
-                    {boxLabel: 'No', name: 'rb', inputValue: '2', checked: true}, ]
+                    {boxLabel: 'Si', name: 'rb3', inputValue: '1'},
+                    {boxLabel: 'No', name: 'rb3', inputValue: '2', checked: true}, ],
+                listeners: {
+                    change: function (field, newValue, oldValue) {
+                        if (parseInt(newValue['rb3']) === 1) {
+                            pregunta3 = 1;
+                        }
+                    }
+                }
             },
             {
                 xtype: 'label',
@@ -50,9 +76,8 @@ Ext.onReady(function () {
             {
                 xtype: 'textareafield',
                 grow: true,
-                name: 'message',
-                anchor: '100%'
-            }
+                id: 'sugerencia',
+                name: 'sugerencia', anchor: '100%'}
 
 
         ],
@@ -63,11 +88,8 @@ Ext.onReady(function () {
         },
         dockedItems: [{
                 xtype: 'toolbar',
-                dock: 'bottom',
-                ui: 'footer',
-                items: ['->', {
-                        iconCls: 'icon-add',
-                        itemId: 'create',
+                dock: 'bottom', ui: 'footer',
+                items: ['->', {iconCls: 'icon-add', itemId: 'create',
                         text: '<span class="btn-menu">Enviar</span>',
                         scope: this,
                         tooltip: '<span class="tooltip">Crear Registro</span>',
@@ -120,15 +142,30 @@ function showWinAdminSugerencias() {
 
 
 function onSendSugerencia() {
-    var form = formSugerencias.getForm();
-    if (form.isValid()) {
-        formSugerencias.fireEvent('create', formSugerencias, form.getValues());
-        form.reset();
-        gridStorePerson.reload();
-    } else {
-        Ext.example.msg("Alerta", 'Llenar los campos marcados en rojo, correctamente ');
-
+    var form = formDenuncias.getForm();
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json',
+        url: 'http://190.12.61.30:5801K-Gestion/webresources/com.kradac.kgestion.rest.entities.sugerencias',
+        dataType: "json",
+        data: formToJSON(),
+        success: function (data, textStatus, jqXHR) {
+            Ext.example.msg('Alerta', 'Se ingresaron los datos');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('addWine error: ' + textStatus);
+        }
+    });
+    function formToJSON() {
+        return JSON.stringify({
+            "pregunta1": pregunta1,
+            "pregunta2": pregunta2,
+            "pregunta3": pregunta3,
+            "sugerencia": Ext.getCmp('sugerencia').getValue(),
+        });
     }
+    ;
+
 }
 
 function onResetSugerencia() {
