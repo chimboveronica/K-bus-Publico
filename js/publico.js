@@ -12,8 +12,52 @@ var spot = Ext.create('Ext.ux.Spotlight', {
     duration: 500
 });
 Ext.onReady(function () {
+    Ext.apply(Ext.form.field.VTypes, {
+            cedulaValida: function(val, field) {
+            if (val.length !== 10) {
+                return false;
+            }
+            if (val.length === 10) {
+                if (check_cedula(val)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        },
+        cedulaValidaText: 'Numero de Cedula Invalida',
+    numeroTelefono: function(val, field) {
+            var partes = val.split("");
+            if (partes.length === 10) {
+                //para celular
+                if (!/^[0]{1}[9]{1}[0-9]{8}$/.test(val)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                //para telefono
+                if (!/^[0]{1}[7]{1}[0-9]{7}$/.test(val)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        },
+        numeroTelefonoText: 'Ingresar solo caracteres numéricos válidos <br>que empiezen con [09] movil tamaño de (10)dígitos<br> 0 [072] convencional tamaño de (9)dígitos ',
+        emailNuevo: function(val, field) {
+            if (!/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/.test(val)) {
+                return false;
+            }
+            return true;
+        },
+        emailNuevoText: 'Dede ingresar segun elz formato kradac@kradac.com <br>sin caracteres especiales',
+        
+        });
     Ext.tip.QuickTipManager.init();
     menuRoute = Ext.create('Ext.menu.Menu', {
+        
         items: [],
         listeners: {
             click: function (menu, item, e, eOpts) {

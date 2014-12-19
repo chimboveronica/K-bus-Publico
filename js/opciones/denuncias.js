@@ -39,6 +39,7 @@ Ext.onReady(function () {
                         fieldLabel: 'Cedula',
                         allowBlank: false,
                         blankText: 'Este campo es obligatorio',
+                        vtype:'cedulaValida'
                     }, {
                         id: 'nombre',
                         fieldLabel: 'Nombre',
@@ -50,12 +51,14 @@ Ext.onReady(function () {
                         fieldLabel: 'Teléfono',
                         allowBlank: false,
                         blankText: 'Este campo es obligatorio',
+                        vtype:'numeroTelefono'
                     },
                     {
                         id: 'correo',
                         fieldLabel: 'Correo',
                         allowBlank: false,
                         blankText: 'Este campo es obligatorio',
+                        vtype:'emailNuevo'
                     },
                     {
                         xtype: 'combobox',
@@ -66,7 +69,8 @@ Ext.onReady(function () {
                         triggerAction: 'all',
                         editable: false,
                         displayField: 'data',
-                        valueField: 'data'
+                        valueField: 'data',
+                        forceselection:true
                     },
                     {
                         xtype: 'textareafield',
@@ -115,7 +119,7 @@ Ext.onReady(function () {
                                 xtype: 'button',
                                 text: 'Buscar',
                                 style: {
-                                    background: '#3A8144',
+                                    background: '#3A8144'
                                 },
                                 handler: function () {
                                     var datos;
