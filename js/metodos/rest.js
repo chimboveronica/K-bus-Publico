@@ -16,24 +16,21 @@ $.ajax({
             dataType:'text',
             success: recuperar,
     error: function () {
-        console.log('Uh Oh!');
+        Ext.example.msg("Alerta", 'Problemas con el servidor');
+
     }
 });
 
 function recuperar(ajaxResponse, textStatus)
 {
-    console.log('entro');
     datos = Ext.JSON.decode(ajaxResponse);
     cargar();
 }
 ;
 function cargar() {
-
     for (var i = 0; i < datos.length; i++) {
         showRouteMap[i] = [datos[i].idRuta, datos[i].ruta, false];
-//        menuRoute.add({itemId: datos[i].id, text: datos[i].ruta, checked: false});
     }
-
     storeAuxRoute = Ext.create('Ext.data.Store', {
         data: datos,
         reader: {

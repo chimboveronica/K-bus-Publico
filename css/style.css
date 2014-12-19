@@ -107,6 +107,11 @@ td.tabla_titulo h3{
     font-size: 20px;
     color:#00008B;
 }
+#titulo {
+    font-family: arial;
+    font-size: 15px;
+    color:#ffffff;
+}
 
 
 #icono{

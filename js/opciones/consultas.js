@@ -51,7 +51,7 @@ Ext.onReady(function () {
                         xtype: 'button',
                         text: 'Buscar',
                         style: {
-                            background: 'red',
+                            background: '#3A8144',
                         },
                         handler: function () {
                             var datos;

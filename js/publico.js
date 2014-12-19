@@ -76,12 +76,12 @@ Ext.onReady(function () {
 
     var menuUsuario = Ext.create('Ext.Button', {
         style: {
-            background: 'white',
+            background: '#3A8144',
         },
         padding: '6 6 6 4',
-        text: '<img src="img/opciones.png" width="120" height="30"/>',
+        text: '<span id="titulo">Opciones</span>',
         menu: [
-            {text: 'Información', handler: function () {
+            {text: 'Consultas', handler: function () {
                     showWinConsultas();
                 }},
             {text: 'Sugerencias', handler: function () {
@@ -106,18 +106,18 @@ Ext.onReady(function () {
                 xtype: 'button',
                 arrowAlign: 'bottom',
                 tooltip: 'Dar click para visualizar',
-                text: '<span style="color:#003F72"><img src="img/parada1.png" width="100" height="50"></span>',
+                text: '<span style="color:#003F72"><img src="img/parada1.png" width="100" height="40"></span>',
                 handler: function () {
                 },
                 listeners: {
                     click: function () {
                         if (bandera) {
-                            this.setText('<span style="color:#003F72"><img src="img/parada2.png" width="100" height="50"></span>');
-                            setEstation();
+                            this.setText('<span style="color:#003F72"><img src="img/parada1.png" width="100" height="40"></span>');
+                            clearLienzoPointsRoute();
                             bandera = false;
                         } else {
-                            this.setText('<span style="color:#003F72"><img src="img/parada1.png" width="100" height="50"></span>');
-                            clearLienzoPointsRoute();
+                            this.setText('<span style="color:#003F72"><img src="img/parada2.png" width="100" height="40"></span>');
+                            setEstation();
                             bandera = true;
                         }
                     }
@@ -127,23 +127,22 @@ Ext.onReady(function () {
             {
                 xtype: 'button',
                 tooltip: 'Dar click para visualizar',
-                text: '<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="50"></span>',
+                text: '<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="40"></span>',
                 handler: function () {
                 },
                 listeners: {
                     click: function () {
                         if (bandera1) {
-                            this.setText('<span style="color:#003F72"><img src="img/ruta2.png" width="100" height="50"></span>');
                             bandera1 = false;
-                            setRoute();
-                            clearVehiclesByRoute();
-
-                        } else {
-                            this.setText('<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="50"></span>');
-                            bandera1 = true;
+                            this.setText('<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="40"></span>');
                             clearLienzoLineRoute();
                             clearMarks();
                             setVehicle();
+                        } else {
+                            this.setText('<span style="color:#003F72"><img src="img/ruta2.png" width="100" height="40"></span>');
+                            setRoute();
+                            clearVehiclesByRoute();
+                            bandera1 = true;
                         }
                     }
 
@@ -232,7 +231,10 @@ Ext.onReady(function () {
 
     storeAuxRoute.load();
     loadMap();
-
+    setTimeout(function () {
+        setVehicle();
+    }
+    , 5 * 1000);
 });
 function setEstation() {
     if (connectionMap()) {
@@ -285,45 +287,49 @@ function setRoute() {
 
 
 function setVehicle() {
+    console.log('ffffff');
     if (idRoute !== '') {
-        if (connectionMap()) {
-            var vehiculos;
-            $.ajax({
-                type: 'GET',
-                url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatofastracks/ruta=' + idRoute, dataType: 'json',
-                dataType:'json',
-                        dataType:'text',
-                        success: recuperarDatos,
-                error: function () {
-                    Ext.example.msg("Alerta", 'Problemas con el servidor');
-                }
-            });
+        if (bandera) {
+            if (connectionMap()) {
+                var vehiculos;
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatofastracks/ruta=' + idRoute, dataType: 'json',
+                    dataType:'json',
+                            dataType:'text',
+                            success: recuperarDatos,
+                    error: function () {
+                        Ext.example.msg("Alerta", 'Problemas con el servidor');
+                    }
+                });
 
-            function recuperarDatos(ajaxResponse, textStatus)
-            {
-                vehiculos = Ext.JSON.decode(ajaxResponse);
-                if (connectionMap()) {
+                function recuperarDatos(ajaxResponse, textStatus)
+                {
+                    vehiculos = Ext.JSON.decode(ajaxResponse);
+                    if (connectionMap()) {
+                        addVehiculosToCanvas(vehiculos);
+                    }
+                }
+
+                var vehiculos;
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatoskps/ruta=' + idRoute, dataType: 'json',
+                    dataType:'json',
+                            dataType:'text',
+                            success: recuperarDatos,
+                    error: function () {
+                        Ext.example.msg("Alerta", 'Problemas con el servidor');
+                    }
+                });
+
+                function recuperarDatos(ajaxResponse, textStatus)
+                {
+                    vehiculos = Ext.JSON.decode(ajaxResponse);
                     addVehiculosToCanvas(vehiculos);
                 }
-            }
-
-            var vehiculos;
-            $.ajax({
-                type: 'GET',
-                url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatoskps/ruta=' + idRoute, dataType: 'json',
-                dataType:'json',
-                        dataType:'text',
-                        success: recuperarDatos,
-                error: function () {
-                    Ext.example.msg("Alerta", 'Problemas con el servidor');
-                }
-            });
-
-            function recuperarDatos(ajaxResponse, textStatus)
-            {
-                vehiculos = Ext.JSON.decode(ajaxResponse);
-                addVehiculosToCanvas(vehiculos);
             }
         }
     }
 }
+
