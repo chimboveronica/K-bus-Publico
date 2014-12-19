@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="img/bus.png" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="extjs-docs-5.0.0/extjs-build/build/packages/ext-theme-neptune/build/resources/ext-theme-neptune-all.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
-
+        
         <link rel="stylesheet" type="text/css" href="extjs-docs-5.0.0/extjs-build/build/examples/shared/example.css">
         <link rel="stylesheet" type="text/css" href="extjs-docs-5.0.0/extjs-build/build/examples/ux/grid/css/GridFilters.css">
         <link rel="stylesheet" type="text/css" href="extjs-docs-5.0.0/extjs-build/build/examples/ux/grid/css/RangeMenu.css">
@@ -22,6 +22,7 @@
         <script type="text/javascript" src="js/opciones/sugerencias.js"></script>
         <script type="text/javascript" src="js/opciones/consultas.js"></script>
         <script type="text/javascript" src="js/opciones/denuncias.js"></script>
+        <script type="text/javascript" src="js/opciones/precios.js"></script>
         <script type="text/javascript" src="js/ext-lang-es.js"></script>
         <!--Fin de Dependencias-->
 

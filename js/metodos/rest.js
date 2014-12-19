@@ -11,11 +11,10 @@ var datos;
 var menuRoute = [];
 $.ajax({
     type: 'GET',
-    url: 'http://190.12.61.30:5801//K-Bus/webresources/com.kradac.kbus.rest.entities.rutas', dataType: 'json',
-    dataType:'json',
-            dataType:'text',
+    url: 'http://190.12.61.30:5801//K-Bus/webresources/com.kradac.kbus.rest.entities.rutas',
+    dataType:'text',
             success: recuperar,
-    error: function () {
+    error: function() {
         Ext.example.msg("Alerta", 'Problemas con el servidor');
 
     }
@@ -24,13 +23,15 @@ $.ajax({
 function recuperar(ajaxResponse, textStatus)
 {
     datos = Ext.JSON.decode(ajaxResponse);
+    
     if (datos.length > 0) {
-        for (var i = 0; i < datos.length; i++) {
-            console.log(datos[i].idRuta);
-            menuRoute.push({itemId: datos[i+1].idRuta, text: datos[i+1].ruta, color: datos[i+1].color});
-            showRouteMap[i] = [datos[i].idRuta, datos[i].ruta, false];
-
-        }
+//        for (var i = 0; i < datos.length; i++) {
+//            console.log(datos[i].idRuta);
+//            menuRoute.push({itemId: datos[i+1].idRuta, text: datos[i+1].ruta, color: datos[i+1].color});
+//            //Xq el +1??
+//            showRouteMap[i] = [datos[i].idRuta, datos[i].ruta, false];
+//        }
+        cargar();
     } else {
         Ext.example.msg("Alerta", 'Problemas con el servidor');
 
@@ -55,9 +56,11 @@ function cargar() {
         },
         fields: [
             'codRuta', 'color', 'distancia', 'fechaHoraRegistro', 'icono', 'idRuta', 'ruta', 'tiempoSancion', 'velocidadComercial', 'velocidadOperacion'
-        ],
+        ]
     });
-
+    console.log(datos);
+    console.log(storeAuxRoute);
+    cargarPrincipal();
 }
 
 
