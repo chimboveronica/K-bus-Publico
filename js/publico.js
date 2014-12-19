@@ -229,12 +229,11 @@ Ext.onReady(function () {
         items: [panelMenu, panelCentral]
     });
 
-    storeAuxRoute.load();
     loadMap();
+    storeAuxRoute.load();
+
     setTimeout(function () {
-        setVehicle();
-    }
-    , 5 * 1000);
+        setVehicle();}, 5 * 1000);
 });
 function setEstation() {
     if (connectionMap()) {

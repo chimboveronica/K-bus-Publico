@@ -30,6 +30,7 @@ function recuperar(ajaxResponse, textStatus)
 function cargar() {
     for (var i = 0; i < datos.length; i++) {
         showRouteMap[i] = [datos[i].idRuta, datos[i].ruta, false];
+        
     }
     storeAuxRoute = Ext.create('Ext.data.Store', {
         data: datos,
