@@ -13,9 +13,9 @@ var spot = Ext.create('Ext.ux.Spotlight', {
     duration: 500
 });
 function cargarPrincipal() {
-    Ext.onReady(function() {
+    Ext.onReady(function () {
         Ext.apply(Ext.form.field.VTypes, {
-            cedulaValida: function(val, field) {
+            cedulaValida: function (val, field) {
                 if (val.length !== 10) {
                     return false;
                 }
@@ -29,7 +29,7 @@ function cargarPrincipal() {
                 return true;
             },
             cedulaValidaText: 'Numero de Cedula Invalida',
-            numeroTelefono: function(val, field) {
+            numeroTelefono: function (val, field) {
                 var partes = val.split("");
                 if (partes.length === 10) {
                     //para celular
@@ -48,7 +48,7 @@ function cargarPrincipal() {
                 }
             },
             numeroTelefonoText: 'Ingresar solo caracteres numéricos válidos <br>que empiezen con [09] movil tamaño de (10)dígitos<br> 0 [072] convencional tamaño de (9)dígitos ',
-            emailNuevo: function(val, field) {
+            emailNuevo: function (val, field) {
                 if (!/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/.test(val)) {
                     return false;
                 }
@@ -61,7 +61,7 @@ function cargarPrincipal() {
         var menuRoutePrincipal = Ext.create('Ext.menu.Menu', {
             items: menuRoute,
             listeners: {
-                click: function(menu, item, e, eOpts) {
+                click: function (menu, item, e, eOpts) {
                     clearLienzoLineRoute();
                     clearVehiclesByRoute();
                     color = item.color;
@@ -105,13 +105,13 @@ function cargarPrincipal() {
             padding: '6 6 6 4',
             text: '<span id="titulo">Opciones</span>',
             menu: [
-                {text: 'Consultas', handler: function() {
+                {text: 'Consultas', handler: function () {
                         showWinConsultas();
                     }},
-                {text: 'Sugerencias', handler: function() {
+                {text: 'Sugerencias', handler: function () {
                         showWinAdminSugerencias();
                     }, },
-                {text: 'Denuncias', handler: function() {
+                {text: 'Denuncias', handler: function () {
                         showWinAdminDenuncias();
                     }}
             ]
@@ -129,12 +129,16 @@ function cargarPrincipal() {
                 {
                     xtype: 'button',
                     arrowAlign: 'bottom',
+                    style: {
+                        background: 'white',
+                        borderStyle: 'none',
+                    },
                     tooltip: 'Dar click para visualizar',
                     text: '<img src="img/parada1.png" width="100" height="40">',
-                    handler: function() {
+                    handler: function () {
                     },
                     listeners: {
-                        click: function() {
+                        click: function () {
                             if (bandera) {
                                 this.setText('<span style="color:#003F72"><img src="img/parada1.png" width="100" height="40"></span>');
                                 clearLienzoPointsRoute();
@@ -151,11 +155,15 @@ function cargarPrincipal() {
                 {
                     xtype: 'button',
                     tooltip: 'Dar click para visualizar',
-                    text: '<img src="img/ruta1.png" width="80" height="40">',
-                    handler: function() {
+                    style: {
+                        background: 'white',
+                        borderStyle: 'none',
+                    },
+                    text: '<img src="img/ruta1.png" width="100" height="40">',
+                    handler: function () {
                     },
                     listeners: {
-                        click: function() {
+                        click: function () {
                             if (bandera1) {
                                 bandera1 = false;
                                 this.setText('<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="40"></span>');
@@ -185,10 +193,10 @@ function cargarPrincipal() {
                     emptyText: 'Ruta',
                     displayField: 'ruta',
                     valueField: 'idRuta',
-                    forceselection:true,
-                    editable:true,
+                    forceselection: true,
+                    editable: true,
                     listeners: {
-                        select: function(thisObject, record, eOpts) {
+                        select: function (thisObject, record, eOpts) {
                             idRoute = record[0].data.idRuta;
                             color = record[0].data.color;
                             clearLienzoLineRoute();
@@ -211,7 +219,7 @@ function cargarPrincipal() {
                     style: {
                         background: '#3A8144'
                     },
-                    handler: function() {
+                    handler: function () {
                         showWinPrecios();
                     }
                 },
@@ -223,7 +231,7 @@ function cargarPrincipal() {
                     style: {
                         background: '#3A8144',
                     },
-                    handler: function() {
+                    handler: function () {
                         getLocation();
                     }
                 }
@@ -258,7 +266,7 @@ function cargarPrincipal() {
 
         loadMap();
 
-        setTimeout(function() {
+        setTimeout(function () {
             if (vehiculo) {
                 setVehicle();
             }
@@ -278,7 +286,7 @@ function setEstation() {
                 dataType:'json',
                         dataType:'text',
                         success: recuperarDatos1,
-                error: function() {
+                error: function () {
                     Ext.example.msg("Alerta", 'Problemas con el servidor');
                 }
             });
@@ -300,7 +308,7 @@ function setRoute() {
             dataType:'json',
                     dataType:'text',
                     success: recuperarDatos,
-            error: function() {
+            error: function () {
                 Ext.example.msg("Alerta", 'Problemas con el servidor');
 
             }
@@ -327,7 +335,7 @@ function setVehicle() {
                     dataType:'json',
                             dataType:'text',
                             success: recuperarDatos,
-                    error: function() {
+                    error: function () {
                         Ext.example.msg("Alerta", 'Problemas con el servidor');
                     }
                 });
@@ -347,7 +355,7 @@ function setVehicle() {
                     dataType:'json',
                             dataType:'text',
                             success: recuperarDatos,
-                    error: function() {
+                    error: function () {
                         Ext.example.msg("Alerta", 'Problemas con el servidor');
                     }
                 });
