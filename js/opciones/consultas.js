@@ -153,7 +153,10 @@ Ext.onReady(function () {
                 dock: 'bottom', ui: 'footer',
                 items: ['->', {
                         iconCls: 'icon-cancel',
-                        text: '<span class="btn-menu">Cancelar</span>',
+                        style: {
+                            background: '#3A8144',
+                        },
+                        text: 'Cancelar',
                         tooltip: '<span class="tooltip">Cancelar</span>',
                         scope: this,
                         handler: function () {

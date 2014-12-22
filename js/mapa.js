@@ -69,16 +69,19 @@ function loadMap() {
             var styleRoute = new OpenLayers.StyleMap({
                 fillOpacity: 0.7,
                 pointRadius: 8,
+                graphicHeight: 30,
+                graphicWidth: 20,
+                externalGraphic: "${icono}",
                 idPunto: "${idPunto}",
                 geo: '${geo}',
                 punto: "${punto}",
                 ordPt: "${ordPt}",
-                label: "${idPunto}",
+//                label: "${idPunto}",
                 dir: "${dir}",
                 fontColor: "white",
                 fillColor: "${color}", //#003DF5
                 strokeColor: "#FFFFFF",
-                strokeOpacity: 0.7,
+//                strokeOpacity: 0.1,
                 fontSize: "12px",
                 fontFamily: "Times New Roman",
                 fontWeight: "bold"

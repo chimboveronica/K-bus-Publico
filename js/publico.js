@@ -79,10 +79,9 @@ function cargarPrincipal() {
             items: [{
                     xtype: 'toolbar',
                     padding: '5 0 0 60',
-                    border: '0 0 3 0',
                     style: {
                         background: '#3A8144',
-                        borderColor: '#FFBF00',
+                        borderColor: 'white',
                         borderStyle: 'solid'
                     },
                     items: [{
@@ -125,7 +124,9 @@ function cargarPrincipal() {
                 borderBottomColor: '#FFBF00',
                 borderBottomWidth: '5px'
             },
-            items: [menuUsuario, '-',
+            items: [
+//                menuUsuario, '-',
+                
                 {
                     xtype: 'button',
                     arrowAlign: 'bottom',
@@ -213,28 +214,25 @@ function cargarPrincipal() {
                     },
                     pageSize: 10
                 }
-                , {
-                    text: '<b><span id="titulo">Ver Tarifas</span></b>',
-                    tooltip: 'Ver Tarifas',
-                    style: {
-                        background: '#3A8144'
-                    },
-                    handler: function () {
-                        showWinPrecios();
-                    }
-                },
+                , 
+//                {
+//                    text: '<b><span id="titulo">Ver Tarifas</span></b>',
+//                    tooltip: 'Ver Tarifas',
+//                    style: {
+//                        background: '#3A8144'
+//                    },
+//                    handler: function () {
+//                        showWinPrecios();
+    //                    }
+//                },
                 '->',
-                {
-                    iconCls: 'icon-localizame',
-                    text: '<img src="img/marker.png"/><b><span id="titulo">Ubicar mi Posición</span></b>',
-                    tooltip: 'Ubicar mi Posición',
-                    style: {
-                        background: '#3A8144',
-                    },
-                    handler: function () {
-                        getLocation();
-                    }
-                }
+//                {
+//                    icon: 'img/localizame.png',
+//                    tooltip: 'Ubicar mi Posición',
+//                    handler: function () {
+//                        getLocation();
+//                    }
+//                }
             ]
         });
         console.log(storeAuxRoute);

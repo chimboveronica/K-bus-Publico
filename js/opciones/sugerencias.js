@@ -90,27 +90,28 @@ Ext.onReady(function () {
                 xtype: 'toolbar',
                 dock: 'bottom', ui: 'footer',
                 items: ['->', {iconCls: 'icon-add', itemId: 'create',
-                        text: '<span class="btn-menu">Enviar</span>',
+                        text: 'Enviar',
+                        style: {
+                            background: '#3A8144',
+                        },
                         scope: this,
                         tooltip: '<span class="tooltip">Crear Registro</span>',
                         handler: onSendSugerencia,
-                        listeners: {
-                            mouseover: function () {
-                                this.setText('<span class="btn-menu-over">Crear</span>');
-                            },
-                            mouseout: function () {
-                                this.setText('<span class="btn-menu">Crear</span>');
-                            }
-                        }
                     }, {
                         iconCls: 'limpiar',
-                        text: '<span class="btn-menu">Limpiar</span>',
+                        text: 'Limpiar',
+                        style: {
+                            background: '#3A8144',
+                        },
                         tooltip: '<span class="tooltip">Limpiar Campos</span>',
                         scope: this,
                         handler: onResetSugerencia
                     }, {
                         iconCls: 'icon-cancel',
-                        text: '<span class="btn-menu">Cancelar</span>',
+                        text: 'Cancelar',
+                        style: {
+                            background: '#3A8144',
+                        },
                         tooltip: '<span class="tooltip">Cancelar</span>',
                         scope: this,
                         handler: function () {

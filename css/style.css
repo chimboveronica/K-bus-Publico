@@ -127,13 +127,74 @@ td.tabla_titulo h3{
     font-family: arial;
     font-size: 12px;
     color: #499249;
-   
+
 }
 
 #imagen{
     position: absolute; bottom: 20px; right: 20px;
 }
+#Botones1{
+    position: absolute; top: 35px; left: 1000px;
+}
+#Botones2{
+    position: absolute; top: 35px; left: 1080px;
+}
+#Botones3{
+    position: absolute; top: 35px; left: 1160px;
+}
+#Botones4{
+    position: absolute; top: 35px; left: 1240px;
+}
 
+#Botones1:hover { 
+    opacity: 0.5; 
+    filter: alpha(opacity=30);
+} 
+#Botones2:hover { 
+    opacity: 0.5; 
+    filter: alpha(opacity=30);
+} 
+#Botones3:hover { 
+    opacity: 0.5; 
+    filter: alpha(opacity=30);
+} 
+#Botones4:hover { 
+    opacity: 0.5; 
+    filter: alpha(opacity=30);
+} 
 #imagenK{
     position: absolute; bottom: 20px; left: 10px;
+}
+
+.tooltip {
+    display: inline;
+    position: relative;
+}
+.tooltip:hover:after {
+    bottom: 6px;
+    content: attr(title); /* este es el texto que será mostrado */
+    left: 5%;
+    position: absolute;
+    z-index: 80;
+    /* el formato gráfico */
+    background: rgba(255,255,255, 0.2); /* el color de fondo */
+    border-radius: 5px;
+    color: #000; /* el color del texto */
+    font-family: Georgia;
+    font-size: 12px;
+    padding: 2px 5px;
+    text-align: center;
+    text-shadow: 1px 1px 1px #000;
+    width: 150px;
+}
+.tooltip:hover:before {
+    bottom: 5px;
+    content: "";
+    left: 5%;
+    position: absolute;
+    z-index: 80;
+    /* el triángulo inferior */
+    border: solid;
+    border-color: rgba(255,255,255, 0.2) transparent;
+    border-width: 6px 6px 0 6px;
 }

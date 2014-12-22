@@ -39,7 +39,7 @@ Ext.onReady(function () {
                         fieldLabel: 'Cedula',
                         allowBlank: false,
                         blankText: 'Este campo es obligatorio',
-                        vtype:'cedulaValida'
+                        vtype: 'cedulaValida'
                     }, {
                         id: 'nombre',
                         fieldLabel: 'Nombre',
@@ -51,14 +51,14 @@ Ext.onReady(function () {
                         fieldLabel: 'Teléfono',
                         allowBlank: false,
                         blankText: 'Este campo es obligatorio',
-                        vtype:'numeroTelefono'
+                        vtype: 'numeroTelefono'
                     },
                     {
                         id: 'correo',
                         fieldLabel: 'Correo',
                         allowBlank: false,
                         blankText: 'Este campo es obligatorio',
-                        vtype:'emailNuevo'
+                        vtype: 'emailNuevo'
                     },
                     {
                         xtype: 'combobox',
@@ -70,7 +70,7 @@ Ext.onReady(function () {
                         editable: false,
                         displayField: 'data',
                         valueField: 'data',
-                        forceselection:true
+                        forceselection: true
                     },
                     {
                         xtype: 'textareafield',
@@ -223,27 +223,28 @@ Ext.onReady(function () {
                 items: ['->', {
                         iconCls: 'icon-add',
                         itemId: 'create',
-                        text: '<span class="btn-menu">Enviar</span>',
+                        style: {
+                            background: '#3A8144',
+                        },
+                        text: 'Enviar',
                         scope: this,
                         tooltip: '<span class="tooltip">Crear Registro</span>',
                         handler: onSendDenuncia,
-                        listeners: {
-                            mouseover: function () {
-                                this.setText('<span class="btn-menu-over">Crear</span>');
-                            },
-                            mouseout: function () {
-                                this.setText('<span class="btn-menu">Crear</span>');
-                            }
-                        }
                     }, {
                         iconCls: 'limpiar',
-                        text: '<span class="btn-menu">Limpiar</span>',
+                        text: 'Limpiar',
+                        style: {
+                            background: '#3A8144',
+                        },
                         tooltip: '<span class="tooltip">Limpiar Campos</span>',
                         scope: this,
                         handler: onResetDenuncia
                     }, {
                         iconCls: 'icon-cancel',
-                        text: '<span class="btn-menu">Cancelar</span>',
+                        style: {
+                            background: '#3A8144',
+                        },
+                        text: 'Cancelar',
                         tooltip: '<span class="tooltip">Cancelar</span>',
                         scope: this,
                         handler: function () {

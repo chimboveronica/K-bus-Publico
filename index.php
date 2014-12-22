@@ -7,7 +7,7 @@
         <link rel="shortcut icon" href="img/bus.png" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="extjs-docs-5.0.0/extjs-build/build/packages/ext-theme-neptune/build/resources/ext-theme-neptune-all.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        
+
         <link rel="stylesheet" type="text/css" href="extjs-docs-5.0.0/extjs-build/build/examples/shared/example.css">
         <link rel="stylesheet" type="text/css" href="extjs-docs-5.0.0/extjs-build/build/examples/ux/grid/css/GridFilters.css">
         <link rel="stylesheet" type="text/css" href="extjs-docs-5.0.0/extjs-build/build/examples/ux/grid/css/RangeMenu.css">
@@ -40,6 +40,11 @@
             document.write('<div id="imagenK">' +
                     '<img  src="img/credits.png"  width="150" height="50"/><img src="img/logos.png"  width="50" height="50"/>' +
                     '</div>');
+            document.write(
+                    '<a href="#" title="Dar Click" class="tooltip"><div id="Botones1"><img src="img/botones-01.png" onClick="showWinConsultas()"  width="80" height="80"/></div></a>\n\
+                    <a href="#" title="Dar Click" class="tooltip"><div id="Botones2"><img src="img/botones-02.png" onClick="showWinAdminSugerencias()" width="80" height="80"/></div></a>\n\
+                    <a href="#" title="Dar Click" class="tooltip"><div id="Botones3"><img src="img/botones-04.png"  onClick="showWinAdminDenuncias()" width="80" height="80"/></div></a>\n\
+                    <a href="#" title="Dar Click" class="tooltip"><div id="Botones4"><img src="img/botones-03.png"  onClick="showWinPrecios()" width="80" height="80"/></div></a>');
 
         </script>
     </body>
