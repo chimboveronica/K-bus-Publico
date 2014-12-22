@@ -126,7 +126,7 @@ function cargarPrincipal() {
             },
             items: [
 //                menuUsuario, '-',
-                
+
                 {
                     xtype: 'button',
                     arrowAlign: 'bottom',
@@ -165,20 +165,25 @@ function cargarPrincipal() {
                     },
                     listeners: {
                         click: function () {
-                            if (bandera1) {
-                                bandera1 = false;
-                                this.setText('<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="40"></span>');
-                                clearLienzoLineRoute();
-                                clearMarks();
-                                vehiculo = true;
-                                setVehicle();
-                            } else {
-                                this.setText('<span style="color:#003F72"><img src="img/ruta2.png" width="100" height="40"></span>');
-                                setRoute();
-                                clearVehiclesByRoute();
-                                bandera1 = true;
-                                vehiculo = false;
+                            if (idRoute !== '') {
 
+                                if (bandera1) {
+                                    bandera1 = false;
+                                    this.setText('<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="40"></span>');
+                                    clearLienzoLineRoute();
+                                    clearMarks();
+                                    vehiculo = true;
+                                    setVehicle();
+                                } else {
+                                    this.setText('<span style="color:#003F72"><img src="img/ruta2.png" width="100" height="40"></span>');
+                                    setRoute();
+                                    clearVehiclesByRoute();
+                                    bandera1 = true;
+                                    vehiculo = false;
+
+                                }
+                            } else {
+                                Ext.example.msg("Alerta", 'Seleccione una Ruta');
                             }
                         }
 
@@ -214,7 +219,7 @@ function cargarPrincipal() {
                     },
                     pageSize: 10
                 }
-                , 
+                ,
 //                {
 //                    text: '<b><span id="titulo">Ver Tarifas</span></b>',
 //                    tooltip: 'Ver Tarifas',
@@ -223,7 +228,7 @@ function cargarPrincipal() {
 //                    },
 //                    handler: function () {
 //                        showWinPrecios();
-    //                    }
+                //                    }
 //                },
                 '->',
 //                {
@@ -276,26 +281,25 @@ function cargarPrincipal() {
 ;
 function setEstation() {
     if (connectionMap()) {
-        if (idRoute !== '') {
-            var resultadoEstaciones;
-            $.ajax({
-                type: 'GET',
-                url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.estaciones', dataType: 'json',
-                dataType:'json',
-                        dataType:'text',
-                        success: recuperarDatos1,
-                error: function () {
-                    Ext.example.msg("Alerta", 'Problemas con el servidor');
-                }
-            });
-
-            function recuperarDatos1(ajaxResponse, textStatus)
-            {
-                resultadoEstaciones = Ext.JSON.decode(ajaxResponse);
-                drawPointsRoute(resultadoEstaciones, idRoute);
+        var resultadoEstaciones;
+        $.ajax({
+            type: 'GET',
+            url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.estaciones', dataType: 'json',
+            dataType:'json',
+                    dataType:'text',
+                    success: recuperarDatos1,
+            error: function () {
+                Ext.example.msg("Alerta", 'Problemas con el servidor');
             }
+        });
+
+        function recuperarDatos1(ajaxResponse, textStatus)
+        {
+            resultadoEstaciones = Ext.JSON.decode(ajaxResponse);
+            drawPointsRoute(resultadoEstaciones, idRoute);
         }
     }
+
 }
 function setRoute() {
     if (connectionMap()) {
