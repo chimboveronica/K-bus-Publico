@@ -12,9 +12,9 @@ var menuRoute = [];
 $.ajax({
     type: 'GET',
     url: 'http://190.12.61.30:5801//K-Bus/webresources/com.kradac.kbus.rest.entities.rutas',
-    dataType:'text',
-            success: recuperar,
-    error: function() {
+    dataType: 'text',
+    success: recuperar,
+    error: function () {
         Ext.example.msg("Alerta", 'Problemas con el servidor');
 
     }
@@ -23,20 +23,7 @@ $.ajax({
 function recuperar(ajaxResponse, textStatus)
 {
     datos = Ext.JSON.decode(ajaxResponse);
-    
-    if (datos.length > 0) {
-//        for (var i = 0; i < datos.length; i++) {
-//            console.log(datos[i].idRuta);
-//            menuRoute.push({itemId: datos[i+1].idRuta, text: datos[i+1].ruta, color: datos[i+1].color});
-//            //Xq el +1??
-//            showRouteMap[i] = [datos[i].idRuta, datos[i].ruta, false];
-//        }
-        cargar();
-    } else {
-        Ext.example.msg("Alerta", 'Problemas con el servidor');
-
-    }
-
+    cargar();
 }
 ;
 function cargar() {
@@ -60,7 +47,6 @@ function cargar() {
     });
     console.log(datos);
     console.log(storeAuxRoute);
-    cargarPrincipal();
-}
+    }
 
 

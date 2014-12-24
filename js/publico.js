@@ -12,7 +12,7 @@ var spot = Ext.create('Ext.ux.Spotlight', {
     easing: 'easeOut',
     duration: 500
 });
-function cargarPrincipal() {
+
     Ext.onReady(function () {
         Ext.apply(Ext.form.field.VTypes, {
             cedulaValida: function (val, field) {
@@ -196,7 +196,7 @@ function cargarPrincipal() {
                     store: storeAuxRoute,
                     fieldLabel: '<img src="img/buscar3.png"/>',
                     labelSeparator: '',
-                    emptyText: 'Ruta',
+                    emptyText: 'Sin Ruta',
                     displayField: 'ruta',
                     valueField: 'idRuta',
                     forceselection: true,
@@ -277,7 +277,7 @@ function cargarPrincipal() {
 
 
     });
-}
+
 ;
 function setEstation() {
     if (connectionMap()) {

@@ -94,10 +94,10 @@ function loadMap() {
                         var geo = feature.attributes.geo;
                         var dir = feature.attributes.dir;
                         var contenidoAlternativo =
-                                "<table>" +
+                                "<center><b>INFORMCIÓN DE LA PARADA</br><img src='img/estacionP.png' width='80' height='80'/></div>" + "</b><table>" +
                                 "<tr><td><b>Parada:</b></td><td>" + punto.toString() + "</td></tr>" +
                                 "<tr><td><b>Dirección:</b></td><td>" + dir.toString() + "</td></tr>" +
-                                "</table>";
+                                "</table><center>";
                         var popup = new OpenLayers.Popup.FramedCloud("popup",
                                 OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
                                 new OpenLayers.Size(200, 60),
@@ -176,26 +176,28 @@ function onVehiculoSelect(evt) {
     var dateTimeLast = feature.attributes.dateTimeLast;
     var speedLast = feature.attributes.speedLast;
     var addressLast = feature.attributes.addressLast;
+    var icono = feature.attributes.iconLast;
     if (addressLast === "") {
         addressLast = "No Definida.";
     }
 
     var contenidoAlternativo =
-            "<table>" +
+            "<center><b>INFORMCIÓN DEL VEHÍCULO</br><img src='" + icono + "'width='60' height='40'/></div>" + "</b><table>" +
             "<tr><td><b>Registro Municipal: </b></td><td>" + muniRegLast + "</td></tr>" +
             "<tr><td><b>Placa: </b></td><td>" + placaLast + "<br>" +
             "<tr><td><b>Fecha y Hora: </b></td><td>" + dateTimeLast + "</td></tr>" +
             "<tr><td><b>Velocidad: </b></td><td>" + speedLast + " Km/h</td></tr>" +
-            "</table>";
+            "</table></center>";
 
     var popup = new OpenLayers.Popup.FramedCloud("popup",
             OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
             new OpenLayers.Size(255, 125),
             contenidoAlternativo,
             null,
-            true, function () {
+            true, function (evt) {
                 map.removePopup(feature.popup);
                 feature.attributes.poppedup = false;
+                feature.popup.destroy;
             }
     );
 
