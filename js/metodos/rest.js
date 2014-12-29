@@ -45,8 +45,8 @@ function cargar() {
             'codRuta', 'color', 'distancia', 'fechaHoraRegistro', 'icono', 'idRuta', 'ruta', 'tiempoSancion', 'velocidadComercial', 'velocidadOperacion'
         ]
     });
-    console.log(datos);
     console.log(storeAuxRoute);
-    }
+
+}
 
 
