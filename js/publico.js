@@ -12,7 +12,16 @@ var spot = Ext.create('Ext.ux.Spotlight', {
     easing: 'easeOut',
     duration: 500
 });
-
+var spotM = Ext.create('Ext.ux.Spotlight', {
+    easing: 'easeOut',
+    duration: 500
+});
+var labelVehiculos = Ext.create('Ext.form.Label', {
+    html: '<center><tr><td><b>Nro. Vehiculos:</b></td><td>0</td></tr></center>',
+    style: {
+        color: '#3A8144',
+    }
+});
 Ext.onReady(function () {
     Ext.apply(Ext.form.field.VTypes, {
         cedulaValida: function (val, field) {
@@ -70,9 +79,7 @@ Ext.onReady(function () {
             }
         }
     });
-//    for (var i = 1; i < datos.length; i++) {
-//        menuRoute.add({itemId: datos[i].idRuta, text: datos[i].ruta, color: datos[i].color});
-//    }
+
 
     var panelMenu = Ext.create('Ext.form.Panel', {
         region: 'north',
@@ -97,24 +104,6 @@ Ext.onReady(function () {
         ]
     });
 
-    var menuUsuario = Ext.create('Ext.Button', {
-        style: {
-            background: '#3A8144',
-        },
-        padding: '6 6 6 4',
-        text: '<span id="titulo">Opciones</span>',
-        menu: [
-            {text: 'Consultas', handler: function () {
-                    showWinConsultas();
-                }},
-            {text: 'Sugerencias', handler: function () {
-                    showWinAdminSugerencias();
-                }, },
-            {text: 'Denuncias', handler: function () {
-                    showWinAdminDenuncias();
-                }}
-        ]
-    });
     var barMap = Ext.create('Ext.toolbar.Toolbar', {
         region: 'north',
         border: true,
@@ -125,8 +114,6 @@ Ext.onReady(function () {
             borderBottomWidth: '5px'
         },
         items: [
-//                menuUsuario, '-',
-
             {
                 xtype: 'button',
                 arrowAlign: 'bottom',
@@ -166,21 +153,20 @@ Ext.onReady(function () {
                 listeners: {
                     click: function () {
                         if (idRoute !== '') {
-
                             if (bandera1) {
                                 bandera1 = false;
                                 this.setText('<span style="color:#003F72"><img src="img/ruta1.png" width="100" height="40"></span>');
                                 clearLienzoLineRoute();
                                 clearMarks();
-                                vehiculo = true;
-                                setVehicle();
+                                clearVehiclesByRoute();
+                                labelVehiculos.setHtml('<center><tr><td><b>Nro. Vehiculos:</b></td><td>0</td></tr></center>')
+                                vehiculo = false;
                             } else {
                                 this.setText('<span style="color:#003F72"><img src="img/ruta2.png" width="100" height="40"></span>');
-                                setRoute();
-                                clearVehiclesByRoute();
+                                vehiculo = true;
                                 bandera1 = true;
-                                vehiculo = false;
-
+                                setRoute();
+                                setVehicle();
                             }
                         } else {
                             Ext.example.msg("Alerta", 'Seleccione una Ruta');
@@ -210,26 +196,19 @@ Ext.onReady(function () {
                             setEstation();
                         }
                         if (bandera1) {
+                            vehiculo = true;
                             setRoute();
+                            setVehicle();
                         } else {
                             clearLienzoLineRoute();
+                            clearVehiclesByRoute();
                         }
-                        clearVehiclesByRoute();
                     }
                 },
                 pageSize: 10
             }
             ,
-//                {
-//                    text: '<b><span id="titulo">Ver Tarifas</span></b>',
-//                    tooltip: 'Ver Tarifas',
-//                    style: {
-//                        background: '#3A8144'
-//                    },
-//                    handler: function () {
-//                        showWinPrecios();
-            //                    }
-//                },
+            labelVehiculos,
             '-',
             {xtype: 'button',
                 tooltip: 'Ubicar mi Posición',
@@ -240,13 +219,23 @@ Ext.onReady(function () {
                 text: '<img src="img/boton.png" width="25" height="30">',
                 handler: function () {
                     getLocation();
-                }}
-
-
+                }
+            },
+            '-',
+            {xtype: 'button',
+                tooltip: 'Ayuda',
+                style: {
+                    background: 'white',
+                    borderStyle: 'none',
+                },
+                text: '<img src="img/ayuda.png" width="25" height="25">',
+                handler: function () {
+                    showWinAyuda();
+                }
+            }
         ]
     });
-    console.log(storeAuxRoute);
-    console.log(storeAuxRoute);
+
     tabPanelMapa = Ext.create('Ext.panel.Panel', {
         region: 'center',
         style: {
@@ -286,6 +275,7 @@ Ext.onReady(function () {
 ;
 function setEstation() {
     if (connectionMap()) {
+
         var resultadoEstaciones;
         $.ajax({
             type: 'GET',
@@ -308,6 +298,7 @@ function setEstation() {
 }
 function setRoute() {
     if (connectionMap()) {
+        clearVehiclesByRoute();
         var resultado;
         $.ajax({
             type: 'GET',
@@ -317,7 +308,6 @@ function setRoute() {
                     success: recuperarDatos,
             error: function () {
                 Ext.example.msg("Alerta", 'Problemas con el servidor');
-
             }
         });
 
@@ -338,26 +328,6 @@ function setVehicle() {
                 var vehiculos;
                 $.ajax({
                     type: 'GET',
-                    url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatofastracks/ruta=' + idRoute, dataType: 'json',
-                    dataType:'json',
-                            dataType:'text',
-                            success: recuperarDatos,
-                    error: function () {
-                        Ext.example.msg("Alerta", 'Problemas con el servidor');
-                    }
-                });
-
-                function recuperarDatos(ajaxResponse, textStatus)
-                {
-                    vehiculos = Ext.JSON.decode(ajaxResponse);
-                    if (connectionMap()) {
-                        addVehiculosToCanvas(vehiculos);
-                    }
-                }
-
-                var vehiculos;
-                $.ajax({
-                    type: 'GET',
                     url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatoskps/ruta=' + idRoute, dataType: 'json',
                     dataType:'json',
                             dataType:'text',
@@ -366,11 +336,12 @@ function setVehicle() {
                         Ext.example.msg("Alerta", 'Problemas con el servidor');
                     }
                 });
-
                 function recuperarDatos(ajaxResponse, textStatus)
                 {
                     vehiculos = Ext.JSON.decode(ajaxResponse);
                     addVehiculosToCanvas(vehiculos);
+                    console.log(vehiculos.length);
+                    labelVehiculos.setHtml('<center><tr><td><b>Nro. Vehiculos:</b></td><td>' + vehiculos.length + '</td></tr></center>');
                 }
             }
         }

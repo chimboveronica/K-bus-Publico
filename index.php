@@ -23,6 +23,8 @@
         <script type="text/javascript" src="js/opciones/consultas.js"></script>
         <script type="text/javascript" src="js/opciones/denuncias.js"></script>
         <script type="text/javascript" src="js/opciones/precios.js"></script>
+        <script type="text/javascript" src="js/opciones/mensaje.js"></script>
+        <script type="text/javascript" src="js/opciones/ayuda.js"></script>
         <script type="text/javascript" src="js/ext-lang-es.js"></script>
         <!--Fin de Dependencias-->
 
@@ -42,7 +44,7 @@
                     '</div>');
             document.write(
                     '<a href="#" title="Dar Click" class="tooltip"><div id="Botones1"><img src="img/botones-01.png" onClick="showWinConsultas()"  width="80" height="80"/></div></a>\n\
-                    <a href="#" title="Dar Click" class="tooltip"><div id="Botones2"><img src="img/botones-02.png" onClick="showWinAdminSugerencias()" width="80" height="80"/></div></a>\n\
+                    <a href="#" title="Dar Click" class="tooltip"><div id="Botones2"><img src="img/botones-02.png" onClick="showWinMensaje()" width="80" height="80"/></div></a>\n\
                     <a href="#" title="Dar Click" class="tooltip"><div id="Botones3"><img src="img/botones-04.png"  onClick="showWinAdminDenuncias()" width="80" height="80"/></div></a>\n\
                     <a href="#" title="Dar Click" class="tooltip"><div id="Botones4"><img src="img/botones-03.png"  onClick="showWinPrecios()" width="80" height="80"/></div></a>');
 
