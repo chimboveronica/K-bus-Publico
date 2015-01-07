@@ -8,6 +8,9 @@ var bandera = true;
 var color;
 var bandera1 = true;
 var vehiculo = false;
+var data = [];
+var datos;
+
 var spot = Ext.create('Ext.ux.Spotlight', {
     easing: 'easeOut',
     duration: 500
@@ -178,19 +181,22 @@ Ext.onReady(function () {
             {
                 xtype: 'combobox',
                 width: '30%',
+                id: 'combo',
+                name: 'combo',
                 labelWidth: 20,
-                store: storeAuxRoute,
+                store: [],
                 fieldLabel: '<img src="img/buscar3.png"/>',
                 labelSeparator: '',
                 emptyText: 'Sin Ruta',
-                displayField: 'ruta',
-                valueField: 'idRuta',
-                forceselection: true,
                 editable: true,
                 listeners: {
                     select: function (thisObject, record, eOpts) {
-                        idRoute = record[0].data.idRuta;
-                        color = record[0].data.color;
+                        for (var i = 0; i < datos.length; i++) {
+                            if (record[0].data.field1 === datos[i].ruta) {
+                                idRoute = datos[i].idRuta;
+                                color = datos[i].color;
+                            }
+                        }
                         clearLienzoLineRoute();
                         if (bandera) {
                             setEstation();
@@ -262,6 +268,7 @@ Ext.onReady(function () {
     });
 
     loadMap();
+//   Ext.getCmp('combo').setData(storeAuxRoute);
 
     setTimeout(function () {
         if (vehiculo) {
@@ -269,13 +276,38 @@ Ext.onReady(function () {
         }
     }, 5 * 1000);
 
+    $.ajax({
+        type: 'GET',
+        url: 'http://190.12.61.30:5801//K-Bus/webresources/com.kradac.kbus.rest.entities.rutas',
+        dataType: 'text',
+        success: recuperar,
+        error: function () {
+            Ext.example.msg("Alerta", 'Problemas con el servidor');
+
+        }
+    });
+
+    function recuperar(ajaxResponse, textStatus)
+    {
+        datos = Ext.JSON.decode(ajaxResponse);
+        cargar();
+    }
+    ;
+    function cargar() {
+
+        for (var i = 0; i < datos.length; i++) {
+            data[i] = datos[i].ruta;
+        }
+        storeAuxRoute.setData(data);
+        Ext.getCmp('combo').setStore(data);
+
+    }
 
 });
 
 ;
 function setEstation() {
     if (connectionMap()) {
-
         var resultadoEstaciones;
         $.ajax({
             type: 'GET',
@@ -340,7 +372,6 @@ function setVehicle() {
                 {
                     vehiculos = Ext.JSON.decode(ajaxResponse);
                     addVehiculosToCanvas(vehiculos);
-                    console.log(vehiculos.length);
                     labelVehiculos.setHtml('<center><tr><td><b>Nro. Vehiculos:</b></td><td>' + vehiculos.length + '</td></tr></center>');
                 }
             }

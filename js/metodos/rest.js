@@ -9,27 +9,8 @@ var showRouteMap = new Array();
 var storeAuxRoute;
 var datos;
 var menuRoute = [];
-$.ajax({
-    type: 'GET',
-    url: 'http://190.12.61.30:5801//K-Bus/webresources/com.kradac.kbus.rest.entities.rutas',
-    dataType: 'text',
-    success: recuperar,
-    error: function () {
-        Ext.example.msg("Alerta", 'Problemas con el servidor');
-
-    }
-});
-
-function recuperar(ajaxResponse, textStatus)
-{
-    datos = Ext.JSON.decode(ajaxResponse);
-    cargar();
-}
-;
-function cargar() {
-
-    storeAuxRoute = Ext.create('Ext.data.Store', {
-        data: datos,
+storeAuxRoute = Ext.create('Ext.data.Store', {
+        data: [],
         reader: {
             type: 'json',
             root: 'data'
@@ -45,7 +26,38 @@ function cargar() {
             'codRuta', 'color', 'distancia', 'fechaHoraRegistro', 'icono', 'idRuta', 'ruta', 'tiempoSancion', 'velocidadComercial', 'velocidadOperacion'
         ]
     });
-    console.log(storeAuxRoute);
+$.ajax({
+    type: 'GET',
+    url: 'http://190.12.61.30:5801//K-Bus/webresources/com.kradac.kbus.rest.entities.rutas',
+    dataType: 'text',
+    success: recuperar,
+    error: function () {
+        Ext.example.msg("Alerta", 'Problemas con el servidor');
+
+    }
+});
+
+function recuperar(ajaxResponse, textStatus)
+{
+    datos = Ext.JSON.decode(ajaxResponse);
+    console.log(datos);
+    cargar();
+}
+;
+function cargar() {
+var data = [];
+    for (var i = 0; i < datos.length; i++) {
+        data.push({
+            codRuta: datos[i].codRuta, color: datos[i].color, 
+            distancia: datos[i].distancia, fechaHoraRegistro: datos[i].fechaHoraRegistro, icono: datos[i].icono,
+            idRuta: datos[i].idRuta, ruta: datos[i].ruta, tiempoSancion: datos[i].tiempoSancion, 
+            velocidadComercial: datos[i].velocidadComercial, velocidadOperacion: datos[i].velocidadOperacion
+        });
+    }
+    storeAuxRoute.setData(data);
+    
+  
+   
 
 }
 
