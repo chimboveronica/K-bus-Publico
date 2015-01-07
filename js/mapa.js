@@ -9,7 +9,7 @@ var lienzoLocalizar;
 var longitudKBus = -79.20733;
 var latitudKBus = -3.9912;
 var zoomKBus = 14;
-
+var lonLat;
 function loadMap() {
     if (connectionMap()) {
         Ext.onReady(function () {
@@ -37,7 +37,7 @@ function loadMap() {
             map.addLayers([osm, gmap, ghyb]);
             map.addLayer(lienzoLocalizar);
             // Centrar el Mapa
-            var lonLat = new OpenLayers.LonLat(longitudKBus, latitudKBus).transform(new OpenLayers.Projection("EPSG:4326"),
+            lonLat = new OpenLayers.LonLat(longitudKBus, latitudKBus).transform(new OpenLayers.Projection("EPSG:4326"),
                     map.getProjectionObject());
             map.setCenter(lonLat, zoomKBus);
             map.events.register('click', map, function (e) {
@@ -291,6 +291,7 @@ function centrarMapa(ln, lt, zoom) {
 }
 
 function drawLineRoute(json, idRuta, color) {
+
     markerStartFinish(json);
     var puntosRuta = new Array();
     for (var i = 0; i < json.length; i++) {
@@ -312,6 +313,8 @@ function drawLineRoute(json, idRuta, color) {
             showRouteMap[i][1] = lineFeature;
         }
     }
+    map.setCenter(lonLat, zoomKBus);
+
 }
 function drawPointsRoute(coordPuntos, idRuta) {
     var features = new Array();

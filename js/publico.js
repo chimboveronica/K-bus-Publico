@@ -225,6 +225,9 @@ Ext.onReady(function () {
                 text: '<img src="img/boton.png" width="25" height="30">',
                 handler: function () {
                     getLocation();
+                    clearLienzoPointsRoute();
+                    clearLienzoLineRoute();
+                    clearVehiclesByRoute();
                 }
             },
             '-',
@@ -330,6 +333,8 @@ function setEstation() {
 }
 function setRoute() {
     if (connectionMap()) {
+        lienzoLocalizar.removeAllFeatures();
+
         clearVehiclesByRoute();
         var resultado;
         $.ajax({
