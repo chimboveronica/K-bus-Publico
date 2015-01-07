@@ -362,6 +362,28 @@ function setVehicle() {
     if (idRoute !== '') {
         if (vehiculo) {
             if (connectionMap()) {
+                var cont = 0;
+                var vehiculos;
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatofastracks/ruta=' + idRoute, dataType: 'json',
+                    dataType:'json',
+                            dataType:'text',
+                            success: recuperarDatos,
+                    error: function () {
+                        Ext.example.msg("Alerta", 'Problemas con el servidor');
+                    }
+                });
+
+                function recuperarDatos(ajaxResponse, textStatus)
+                {
+                    vehiculos = Ext.JSON.decode(ajaxResponse);
+                    cont = cont + vehiculos.length;
+                    if (connectionMap()) {
+                        addVehiculosToCanvas(vehiculos);
+                    }
+                }
+
                 var vehiculos;
                 $.ajax({
                     type: 'GET',
@@ -373,15 +395,19 @@ function setVehicle() {
                         Ext.example.msg("Alerta", 'Problemas con el servidor');
                     }
                 });
+
                 function recuperarDatos(ajaxResponse, textStatus)
                 {
                     vehiculos = Ext.JSON.decode(ajaxResponse);
                     addVehiculosToCanvas(vehiculos);
-                    labelVehiculos.setHtml('<center><tr><td><b>Nro. Vehiculos:</b></td><td>' + vehiculos.length + '</td></tr></center>');
+                    cont = cont + vehiculos.length;
+                    labelVehiculos.setHtml('<center><tr><td><b>Nro. Vehiculos:</b></td><td>' + cont + '</td></tr></center>');
+
                 }
+
+
             }
         }
     }
-
 }
 
