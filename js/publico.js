@@ -273,11 +273,7 @@ Ext.onReady(function () {
     loadMap();
 //   Ext.getCmp('combo').setData(storeAuxRoute);
 
-    setTimeout(function () {
-        if (vehiculo) {
-            setVehicle();
-        }
-    }, 5 * 1000);
+   
 
     $.ajax({
         type: 'GET',
@@ -305,6 +301,15 @@ Ext.onReady(function () {
         Ext.getCmp('combo').setStore(data);
 
     }
+
+setInterval(function () {
+     setVehicle();
+}, 15000);
+// setTimeout(function () {
+//        console.log('sadasdas');
+////        vehiculo=true;
+////            setVehicle();
+//    }, 1);
 
 });
 
@@ -359,6 +364,7 @@ function setRoute() {
 
 
 function setVehicle() {
+    clearVehiclesByRoute();
     if (idRoute !== '') {
         if (vehiculo) {
             if (connectionMap()) {
@@ -379,33 +385,37 @@ function setVehicle() {
                 {
                     vehiculos = Ext.JSON.decode(ajaxResponse);
                     cont = cont + vehiculos.length;
+                                            console.log(vehiculos.length);
+                                            console.log(cont);
+
                     if (connectionMap()) {
                         addVehiculosToCanvas(vehiculos);
+                        recuperarDatosSky(cont); 
                     }
                 }
+                function recuperarDatosSky(cont) {
+                    var vehiculos;
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatoskps/ruta=' + idRoute, dataType: 'json',
+                        dataType:'json',
+                                dataType:'text',
+                                success: recuperarDatos1,
+                        error: function () {
+                            Ext.example.msg("Alerta", 'Problemas con el servidor');
+                        }
+                    });
 
-                var vehiculos;
-                $.ajax({
-                    type: 'GET',
-                    url: 'http://190.12.61.30:5801/K-Bus/webresources/com.kradac.kbus.rest.entities.ultimodatoskps/ruta=' + idRoute, dataType: 'json',
-                    dataType:'json',
-                            dataType:'text',
-                            success: recuperarDatos,
-                    error: function () {
-                        Ext.example.msg("Alerta", 'Problemas con el servidor');
-                    }
-                });
-
-                function recuperarDatos(ajaxResponse, textStatus)
-                {
-                    vehiculos = Ext.JSON.decode(ajaxResponse);
-                    addVehiculosToCanvas(vehiculos);
-                    cont = cont + vehiculos.length;
-                    labelVehiculos.setHtml('<center><tr><td><b>Nro. Vehiculos:</b></td><td>' + cont + '</td></tr></center>');
-
-                }
-
-
+                    function recuperarDatos1(ajaxResponse, textStatus)
+                    {
+                        vehiculos = Ext.JSON.decode(ajaxResponse);
+                        addVehiculosToCanvas(vehiculos);
+                        console.log('asasx');
+                        console.log(vehiculos.length);
+                        cont = cont + vehiculos.length;
+                        console.log(cont);
+                        labelVehiculos.setHtml('<center><tr><td><b>Nro. Vehiculos:</b></td><td>' + cont + '</td></tr></center>');
+                    }}
             }
         }
     }
